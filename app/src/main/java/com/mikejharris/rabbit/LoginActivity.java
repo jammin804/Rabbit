@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -23,9 +24,11 @@ public class LoginActivity extends Activity {
     protected EditText mPassword;
     protected Button mLogInButton;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_login);
 
         mSignUpTextView = (TextView)findViewById(R.id.signupText);
@@ -37,9 +40,10 @@ public class LoginActivity extends Activity {
             }
         });
 
+
         mUsername = (EditText)findViewById(R.id.usernameField);
         mPassword = (EditText)findViewById(R.id.passwordField);
-        mLogInButton = (Button)findViewById(R.id.signupButton);
+        mLogInButton = (Button)findViewById(R.id.loginButton);
         mLogInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -58,9 +62,13 @@ public class LoginActivity extends Activity {
                     dialog.show();
                 } else {
                     //logging in
+                    setProgressBarIndeterminateVisibility(true);
+
                     ParseUser.logInInBackground(username, password, new LogInCallback() {
                         @Override
                         public void done(ParseUser user, ParseException e) {
+                            setProgressBarIndeterminateVisibility(false);
+
                             if(e==null){
                                 //Success!
                                 Intent intent = new Intent(LoginActivity.this, MyActivity.class);
@@ -96,7 +104,7 @@ public class LoginActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             return true;
         }
         return super.onOptionsItemSelected(item);

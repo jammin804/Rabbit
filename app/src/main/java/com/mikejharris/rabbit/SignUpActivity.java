@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -25,6 +26,7 @@ public class SignUpActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.activity_sign_up);
 
         mUsername = (EditText)findViewById(R.id.usernameField);
@@ -51,6 +53,7 @@ public class SignUpActivity extends Activity {
                     dialog.show();
                 }else {
                     //this is where we will create the new user
+                    setProgressBarIndeterminateVisibility(true);
                     ParseUser newUser = new ParseUser();
                     newUser.setUsername(username);
                     newUser.setPassword(password);
@@ -58,6 +61,7 @@ public class SignUpActivity extends Activity {
                     newUser.signUpInBackground(new SignUpCallback() {
                         @Override
                         public void done(ParseException e) {
+                            setProgressBarIndeterminateVisibility(false);
                             if(e == null){
                                 //Success!
                                 Intent intent = new Intent(SignUpActivity.this, MyActivity.class);
@@ -93,7 +97,7 @@ public class SignUpActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_logout) {
             return true;
         }
         return super.onOptionsItemSelected(item);
